@@ -26,12 +26,38 @@ function priontOwing(invoice) {
 // 動機
 // コードの断片をみて、何をしているのか理解した上で、独立した関数として抽出し、目的にふさわしい名前をつける
 // 示唆のあるテキスト
-// 大きな関数の中には、 何をするかを説明したコメントで始まるコードの断片が見つかることが  よくあります。 コメントは、 関数としてその断片を抽出するときの、 ふさわしい名前を示唆して  くれることがあります。
+// 大きな関数の中には、 何をするかを説明したコメントで始まるコードの断片が見つかることがよくあります。コメントは、関数としてその断片を抽出するときの、ふさわしい名前を示唆してくれることがあります。
 // ＭａｒｔｉｎＦｏｗｌｅｒ. リファクタリング 既存のコードを安全に改善する（第2版） (p. 113). Kindle Edition.
 
-// スコープ外となる変数がない場合
-// ローカル変数を使用する場合
+// リファクタリング前
+function printOwing(invoice) {
+  let outstanding = 0
 
+  console.log('***********************')
+  console.log('**** Customer Owes ****')
+  console.log('***********************')
+
+  // 未払金の計算
+
+  for (const o of invoice.orders) {
+    outstanding += o.amount
+  }
+
+  // 締日の記録(record due date)
+  const today = Clock.today
+  invoice.dueDate = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() + 30
+  )
+
+  // 明細の印字
+  console.log(`name: ${invoice.customer}`)
+  console.log(`amount: ${outstanding}`)
+  console.log(`due: ${invoice.dueDate.toLocaleDateString()}`)
+}
+
+// リファクタリング後
 function printOwing(invoice) {
   printBanner()
 
